@@ -1,5 +1,6 @@
 # chessy
 Полноценные шахматы на JavaScript с адаптивным CSS
+
 Деплой https://self-related.github.io/chessy/
 
 Что есть:
