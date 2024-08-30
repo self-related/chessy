@@ -1,0 +1,109 @@
+:root {
+    --min-side: min(100vw, 100vh); /* наименьшая сторона окна */
+    --font-size-adaptive: calc(var(--min-side) * 0.02); /* 2% от мин стороны*/
+    --theme-accent: purple;
+    
+    background-color: #252525;
+    color: #dddddd;
+    font-size: max( 9px, var(--font-size-adaptive) ); /* 2% мин стороны, но не меньше 8px*/
+}
+
+:root, root * {
+    box-sizing: border-box;
+}
+
+header, footer {
+    margin: auto;
+    text-align: center;
+}
+
+.board-borders {
+    width: 35rem;
+    aspect-ratio: 1/1;
+    margin: auto;
+    padding: 1rem;
+    padding-bottom: 0;
+    outline: 1px solid white;
+}
+
+.number-coords {
+    height: 90%;
+    float: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.letter-coords {
+    width: 90%;
+    display: flex;
+    justify-content: space-around;
+    margin: auto;
+}
+
+#board {
+    width: 90%;
+    aspect-ratio: 1/1;
+    display: flex;
+    flex-wrap: wrap-reverse;
+    outline: 1px solid white;
+    /* box-shadow: 0 0 20px var(--theme-accent); */
+    margin: auto;
+}
+
+.cell {
+    width: calc(100% / 8);
+    aspect-ratio: 1/1;
+    background-color: white;
+    border: none;
+    align-content: center;
+    font-size: 2rem;
+    text-shadow: 0px 0px 1px white;
+}
+.cell:hover {
+    background-color: #aaaaaa;
+}
+.cell:active {
+    background-color: var(--theme-accent);
+}
+
+.cell-black {
+    background-color: black;
+}
+.cell-black:hover {
+    background-color: #909090;
+}
+.cell:active {
+    background-color: var(--theme-accent);
+}
+
+.figure {
+    outline: 1px solid white;
+    /* theme shadow  */
+}
+
+.team-white {
+    color: #eee;
+    text-shadow: 0.03rem 0.03rem 0.03rem black, -0.03rem -0.03rem 0.03rem black, 0 0 0.15rem #202020;
+
+}
+
+.team-black {
+    color: #252525;
+    text-shadow: 0.02rem 0.025rem 0.02rem #fff, -0.02rem -0.04rem 0.03rem #fff, 0 0 0.15rem #999;
+}
+
+.possible-move {
+    position: relative;
+}
+.possible-move::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: "";
+    width: 100%;
+    height: 100%;
+    background: crimson;
+    opacity: 50%;
+}
+
