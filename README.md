@@ -12,6 +12,7 @@
 
 ## Запуск:
 1. git clone https://github.com/self-related/chessy.git
-2. Открыть в браузере index.html
+2. cd chessy
+3. npx live-server
 
 Либо сразу здесь: https://self-related.github.io/chessy/
