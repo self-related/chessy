@@ -49,7 +49,7 @@ function Figure(cell, initialFigure) {
     this.team = cell.coords[1] < 5 ? "white" : "black";
     this.symbol = symbol;
     this.possibleMoves = null;
-    this.setPossibleMoves = () => moves[name](this);
+    this.setPossibleMoves = () => moves[this.name](this);
     this.isFirstMove = true; // нужно только для пешки
 }
     

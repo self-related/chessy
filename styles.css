@@ -12,12 +12,20 @@
     box-sizing: border-box;
 }
 
+.hidden {
+    display: none;
+}
+.text-center {
+    text-align: center;
+}
+
 header, footer {
     margin: auto;
     text-align: center;
 }
 
 .board-borders {
+    position: relative;
     width: 35rem;
     aspect-ratio: 1/1;
     margin: auto;
@@ -107,3 +115,25 @@ header, footer {
     opacity: 50%;
 }
 
+.dialog-pawn-change {
+    position: absolute;
+    top: 15%;
+    left: 25%;
+    width: 20rem;
+    min-width: 200px;
+    min-height: 20vw;
+    overflow-y: scroll;
+    padding: 1vw;
+    background-color: #202020;
+    border: 1px solid white;
+    z-index: 1;
+}
+
+.option-new-figure {
+    cursor: pointer;
+    font-size: 2rem;
+}
+
+.option-new-figure:hover {
+    color: var(--theme-accent);
+}

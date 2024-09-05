@@ -67,6 +67,56 @@ const checkCheck = () => {
 
 }
 
+//если пешка дошла до края
+const checkPawnEdge = (cell) => {
+    if (cell.index > 55 || cell.index < 8) {
+        console.log("Edge");
+        const dialogPawnChange = document.getElementById("dialog-pawn-change");
+        dialogPawnChange.innerHTML += "test";
+        const classTeam = cell.figure.team === "white" ? "team-white" : "team-black";
+        
+        const onClick = (event) => {
+            cell.figure.name = event.target.name;
+            cell.figure.symbol = event.target.symbol;
+
+            dialogPawnChange.classList.toggle("hidden");
+            updateElements.updateCellElements(cells);
+        };
+
+        dialogPawnChange.classList.toggle("hidden");
+        dialogPawnChange.innerHTML = "";
+        dialogPawnChange.innerHTML += '<h2 class="text-center">Выберите фигуру вместо пешки:</h2>';
+        [
+            {
+                name: "knight",
+                symbol: "♞"
+            },
+            {
+                name: "queen",
+                symbol: "♛"
+            },
+            {
+                name: "rook",
+                symbol: "♜"
+            },
+            {
+                name: "bishop",
+                symbol: "♝"
+            },
+        ].forEach((figure) => {
+            const figureElement = document.createElement("p");
+
+            figureElement.name = figure.name;
+            figureElement.symbol = figure.symbol;
+            // figureElement.classList.add(classTeam);
+            figureElement.classList.add("option-new-figure");
+            figureElement.innerHTML += `<span class="${classTeam}">${figure.symbol}</span> ${figure.name}`
+            figureElement.addEventListener("click", onClick);
+            dialogPawnChange.appendChild(figureElement);
+        });
+    }
+};
+
 //передвинуть выбранную фигуру на новое место
 const moveFigure = (figureChosen, cell) => {
 
@@ -88,6 +138,12 @@ const moveFigure = (figureChosen, cell) => {
     
     //поместить ссылку на текущую фигуру в новую клетку
     cell.figure = figureChosen;
+
+
+    if (cell.figure.name === "pawn") {
+        console.log("cell index" + cell.index);
+        checkPawnEdge(cell);
+    }
 
     updatePossibleMoves();
 };
@@ -131,7 +187,8 @@ export const cellElementsClickHandler = (event) => {
         } else {
             states.teamTurn = "white";
         }
-        states.figureChosen = null;
+
+        states.figureChosen = null; //фигура снова не выбрана
 
         //проверить на шах
         checkCheck();
