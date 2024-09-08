@@ -36,10 +36,6 @@ const updatePossibleMoves = () => {
 
         allPossibleMoves[figure.team] = [...allPossibleMoves[figure.team], ...figurePossibleMoves];
     });
-
-    king.white.possibleMoves = king.white.possibleMoves.filter(move => !allPossibleMoves.black.includes(move));
-    king.black.possibleMoves = king.black.possibleMoves.filter(move => !allPossibleMoves.white.includes(move));
-
 }
 
 //проверить только шах
