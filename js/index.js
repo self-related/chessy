@@ -81,6 +81,7 @@ const checkPawnEdge = (cell) => {
 
             dialogPawnChange.classList.toggle("hidden");
             updateElements.updateCellElements(cells);
+            updatePossibleMoves();
         };
 
         dialogPawnChange.classList.toggle("hidden");
