@@ -1,0 +1,213 @@
+:root {
+	font-size: min(1.3vw, 2vh);
+	background-color: #252525;
+	color: #ffffff;
+
+	--rel-font: 1rem;
+}
+
+:root * {
+	box-sizing: border-box;
+}
+
+html, body {
+	min-width: 100vw;
+	min-height: 100vh;
+
+	margin: 0;
+}
+
+h1 {
+	flex-grow: 1;
+}
+
+main {
+	width: 70vw;
+}
+
+footer {
+	margin-bottom: 1rem;
+}
+
+
+/* elements */
+#app {
+	position: relative;
+	width: min(50vw, 70vh);
+}
+
+#board {
+	position: relative;
+
+	border: 1px solid transparent;
+	border-radius: 35px;
+	border-image: linear-gradient(to top, rgba(241, 2, 241, 0.466) 0%, rgba(251, 32, 3, 0.568) 100%) 1 / 26% round space;
+	border-width: 0.55rem;
+	border-style: solid;
+
+	width: 90%;
+	aspect-ratio: 1/1;
+
+	display: flex;
+	flex-direction: column-reverse;
+	flex-wrap: wrap;
+	justify-content: start;
+	align-items: start;
+
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#numbers {
+	position: absolute;
+	top: -0.1rem;
+	display: flex;
+	float: left;
+	width: 2rem;
+	height: 100%;
+	flex-direction: column-reverse;
+	justify-content: space-evenly;
+
+	align-items: start;
+	font-size: 1.2rem;
+	padding-bottom: 1rem;
+}
+
+#letters {
+	display: flex;
+	justify-content: space-evenly;
+	width: 100%;
+	font-size: 1.2rem;
+
+}
+
+
+/* classes */
+.flex-all-center {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.cell {
+	width: calc(100% / 8);
+	aspect-ratio: 1/1;
+
+	margin: 0;
+	padding: 0;
+	
+	display: inline;
+	border: none;
+	background-color: #ffffff;
+	vertical-align: bottom;
+	text-shadow: 0.03rem 0.03rem 0.03rem gray;
+
+	position: relative;
+
+	font-size: 1rem;
+	z-index: 0;
+}
+.cell:hover::after {
+	content: " ";
+	position: absolute;
+	top: 0;
+	left: 0;
+	
+	background-color: rgba(128, 0, 128, 0.546);
+	width: 100%;
+	height: 100%;
+	z-index: -1;
+}
+
+.column-even:nth-child(2n+1) {
+	background-color: black;
+	color: #ffffff;
+}
+
+.column-odd:nth-child(2n) {
+	background-color: black;
+	color: #ffffff;
+
+}
+
+.chess-piece {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	align-content: center;
+	font-size: 1.8rem;
+	text-align: center;
+
+	cursor: pointer;
+}
+
+.chess-piece:hover::after {
+	content: "";
+
+	position: absolute;
+	top: 0;
+	left: 0;
+
+	width: 100%;
+	height: 100%;
+	background-color: rgba(128, 0, 128, 0.323);
+	z-index: 2;
+}
+
+.chess-piece-white {
+	color: white;
+	text-shadow: black 0.05rem 0.05rem 0.07rem, black -0.05rem -0.05rem 0.07rem;
+}
+
+.chess-piece-black {
+	color: black;
+	text-shadow: white 0.05rem 0.05rem 0.07rem, white -0.05rem -0.05rem 0.07rem ;
+
+}
+
+.possible-move::after {
+	content: "";
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(255, 0, 0, 0.537);
+	z-index: 0;
+}
+
+.game-over {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	background-color: #00000090;
+	width: 100%;
+	height: 100%;
+}
+
+#choose-new-piece {
+	position: absolute;
+	top: 20%;
+	left: 20%;
+	width: 60%;
+	height: 60%;
+	background-color: #252525e2;
+	z-index: 1;
+	display: none;
+}
+#choose-new-piece > div {
+	margin: auto;
+	max-width: 50%;
+	font-size: 2rem;
+	cursor: pointer;
+}
+
+#choose-new-piece > div:hover {
+	color: purple;
+}
+.display-block {
+	display: block !important;
+}
