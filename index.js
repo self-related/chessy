@@ -71,6 +71,14 @@ function isCheck() {
 			checkBlackCount = 0;
 		}
 	});
+
+	if (checkWhiteCount === 2) {
+		alert("Blacks won!");
+		boardHTML.appendChild(gameOverCover);
+	} else if (checkBlackCount === 2) {
+		alert("Whites won!");
+		boardHTML.appendChild(gameOverCover);
+	}
 }
 
 function move(newCellIndex) {
@@ -95,14 +103,6 @@ function move(newCellIndex) {
 	cleanPossibleMoves();
 	updatePossibleMoves();
 	setTimeout(isCheck, 0); //check after html render
-
-	if (checkWhiteCount === 2) {
-		alert("Blacks won!");
-		boardHTML.appendChild(gameOverCover);
-	} else if (checkBlackCount === 2) {
-		alert("Whites won!");
-		boardHTML.appendChild(gameOverCover);
-	}
 }
 
 
