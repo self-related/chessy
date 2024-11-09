@@ -94,7 +94,7 @@ function move(newCellIndex) {
 
 	cleanPossibleMoves();
 	updatePossibleMoves();
-	isCheck();
+	setTimeout(isCheck, 0); //check after html render
 
 	if (checkWhiteCount === 2) {
 		alert("Blacks won!");
@@ -212,7 +212,7 @@ chooseNewPieceDivs.forEach((element) => {
 
 		updatePiecesHTML(board, pieces);
 		updatePossibleMoves();
-		isCheck();
+		setTimeout(isCheck, 0); //check after html render
 
 		chooseNewPieceWindow.classList.remove("display-block");
 	});
