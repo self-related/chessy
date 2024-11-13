@@ -45,7 +45,8 @@ function initBoard(cells = new Array(64).fill(null)) {
 		{
 			/**@type {ChessPiece} */
 			piece: null,
-
+			isPossibleWhiteKill: false,
+			isPossibleBlackKill: false,
 			isPossibleMove: false,
 		}
 	));
@@ -58,6 +59,8 @@ const cleanPossibleMoves = () => {
 	board.forEach((cell, index) => {
 		cell.isPossibleMove = false;
 		cell.moveFor = null;
+		cell.isPossibleWhiteKill = false;
+		cell.isPossibleBlackKill = false;
 		document.getElementById("cell-"+ index).classList.remove("possible-move");
 	});
 }
@@ -96,7 +99,13 @@ function isCheck() {
 	} else if (checkBlackCount === 2) {
 		alert("Whites won!");
 		boardHTML.appendChild(gameOverCover);
-	}
+	} else if (currentTurn === "white" && checkWhiteCount > 0) {
+		alert("You killed your beloved king. Blacks won!");
+		boardHTML.appendChild(gameOverCover);
+	} else if (currentTurn === "black" && checkBlackCount > 0) {
+		alert("You killed your beloved king. Whites won!");
+		boardHTML.appendChild(gameOverCover);
+	} 
 }
 
 /**
@@ -117,15 +126,20 @@ function move(newCellIndex) {
 		pieces = pieces.filter((piece) => piece != killedPiece);
 	}
 
-	if (currentTurn === "white") {
-		currentTurn = "black";
-	} else {
-		currentTurn = "white";
-	}
+
 
 	cleanPossibleMoves();
 	updatePossibleMoves();
-	setTimeout(isCheck, 0); //look for check only after all html is rendered
+	setTimeout(() => {
+		isCheck();
+		if (currentTurn === "white") {
+			currentTurn = "black";
+		} else {
+			currentTurn = "white";
+		}
+	
+	}, 0); //look for check only after all html is rendered
+
 }
 
 /**

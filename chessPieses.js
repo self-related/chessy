@@ -113,10 +113,18 @@ class ChessPiece {
 	 * @param {String} team - indicates a team of the possible move 
 	 * @returns {undefined} - returns void
 	 */
-	static markPossibleMoves = (possibleMoves, team) => {
+	static markPossibleMoves = (possibleMoves, team, name) => {
 	
 		possibleMoves.forEach((move) => {
 			board[move].isPossibleMove = true;
+			if (name !== "pawn") {
+				team === "white" ? board[move].isPossibleWhiteKill = true : board[move].isPossibleBlackKill = true;
+			} else {
+				team === "white" ? board[move].isPossibleWhiteKill = false : board[move].isPossibleBlackKill = false;
+			}
+			// else if (name === "pawn") {
+			// 	board[move].isPossibleKill = false;
+			// }
 			board[move].moveFor = team;
 		});
 	}
@@ -140,6 +148,18 @@ class ChessPiece {
 		let killedPiece = null;
 
 		if (this.possibleMoves.includes(newCellIndex)) {
+
+			if (this.name === "king" && this.team === "white"
+				&& board[newCellIndex].isPossibleBlackKill
+				||
+				this.name === "king" && this.team === "black"
+				&& board[newCellIndex].isPossibleWhiteKill
+				 
+			) {
+				console.log(board[newCellIndex].isPossibleKill);
+				window.alert("Please don't kill your beloved king!");
+				return {result: false, killedPiece};
+			}
 
 			if (board[newCellIndex].piece) {
 				killedPiece = board[newCellIndex].piece;		
@@ -458,7 +478,15 @@ class Pawn extends ChessPiece {
 		}
 
 
-		ChessPiece.markPossibleMoves(this.possibleMoves, this.team);
+		ChessPiece.markPossibleMoves(this.possibleMoves, this.team, this.name);
+		if ( killMove1 >= 0 && killMove1 < 64 ) {
+			this.team === "white" ? board[killMove1].isPossibleWhiteKill = true : board[killMove1].isPossibleBlackKill = true;
+		}
+
+		if ( killMove2 >= 0 && killMove2 < 64 ) {
+			this.team === "white" ? board[killMove2].isPossibleWhiteKill = true : board[killMove2].isPossibleBlackKill = true;
+		}
+
 	}
 
 	/**
@@ -500,7 +528,7 @@ class Rook extends ChessPiece {
 
 		this.possibleMoves = [...straightMoves];
 
-		ChessPiece.markPossibleMoves(this.possibleMoves, this.team);
+		ChessPiece.markPossibleMoves(this.possibleMoves, this.team, this.name);
 
 	}
 	
@@ -558,7 +586,7 @@ class Knight extends ChessPiece {
 			this.possibleMoves.push(possibleMove);
 
 		}
-		ChessPiece.markPossibleMoves(this.possibleMoves, this.team);
+		ChessPiece.markPossibleMoves(this.possibleMoves, this.team, this.name);
 	}
 
 	/**
@@ -586,7 +614,7 @@ class Bishop extends ChessPiece {
 
 		this.possibleMoves = [...diagonalMoves];
 
-		ChessPiece.markPossibleMoves(this.possibleMoves, this.team);
+		ChessPiece.markPossibleMoves(this.possibleMoves, this.team, this.name);
 
 	}
 
@@ -615,7 +643,7 @@ class Queen extends ChessPiece {
 
 		this.possibleMoves = [...straightMoves, ...diagonalMoves];
 
-		ChessPiece.markPossibleMoves(this.possibleMoves, this.team);
+		ChessPiece.markPossibleMoves(this.possibleMoves, this.team, this.name);
 
 	}
 
@@ -644,7 +672,7 @@ class King extends ChessPiece {
 
 		this.possibleMoves = [...straightMoves, ...diagonalMoves];
 
-		ChessPiece.markPossibleMoves(this.possibleMoves, this.team);
+		ChessPiece.markPossibleMoves(this.possibleMoves, this.team, this.name);
 
 	}
 
