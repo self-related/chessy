@@ -49,9 +49,9 @@ class ChessPiece {
 
 	/**
 	 * Checks for vertical bounds for a possible move
-	 * @param {number} cellIndex index of the current cell 
-	 * @param {number} possibleMove cell index of a possible move for checking
-	 * @returns {boolean} true - is in bounds, false - out of bounds
+	 * @param {number} cellIndex - index of the current cell 
+	 * @param {number} possibleMove - cell index of a possible move for checking
+	 * @returns {boolean} - if true - is in bounds, if false - out of bounds
 	 */
 	static isInVerticalBounds = (cellIndex, possibleMove) => {
 		if (possibleMove > 63 || possibleMove < 0) {
@@ -109,9 +109,9 @@ class ChessPiece {
 	
 	/**
 	 * Marks cells as possible moves
-	 * @param {Array<number>} possibleMoves 
-	 * @param {String} team 
-	 * @returns {undefined}
+	 * @param {Array<number>} possibleMoves - array of cell indices of possible moves
+	 * @param {String} team - indicates a team of the possible move 
+	 * @returns {undefined} - returns void
 	 */
 	static markPossibleMoves = (possibleMoves, team) => {
 	
@@ -133,8 +133,8 @@ class ChessPiece {
 
 	/**
 	 * Moves the chess piece to another cell
-	 * @param {number} newCellIndex 
-	 * @returns {{returns: boolean, killedPiece: ChessPiece}}
+	 * @param {number} newCellIndex - index of a cell where the chess piece will be moved
+	 * @returns {{result: boolean, killedPiece: ChessPiece}} - returns move result with killed chess piece (if it was killed)
 	 */
 	move(newCellIndex) {
 		let killedPiece = null;
@@ -167,14 +167,25 @@ class ChessPiece {
 		}
 	}
 
+	/**
+	 * Unique for every chess piece - gets possible moves for a specific chess piece and puts it into this.possibleMoves
+	 * 
+	 * to be overridden
+	 * @returns {undefined}
+	 */
 	getPossibleMoves() {
-		//to be overridden
 	}
 
+	/**
+	 * Get possible moves for straight directions
+	 * @param {number} modifier - how much cells to check in each direction (for rook - 8 (default), for king should be passed 1)
+	 * @returns {Array<number>} - returns an array of indices of the possible moves
+	 */
 	getStraightMoves = (modifier = 8) => {
 		const possibleMoves = [];
 
-		//get moves up
+		/* 4 for loops check moves - up, down, left, right */
+
 		for (let i = 1; i <= modifier; i++) {
 
 			const possibleMove = this.cellIndex + i;
@@ -258,10 +269,16 @@ class ChessPiece {
 		
 	}
 
+	/**
+	 * Get possible moves for diagonal directions
+	 * @param {number} modifier - how much cells to check in each direction (for rook - 8 (default), for king should be passed 1)
+	 * @returns {Array<number>} - array of indices of possible diagonal moves
+	 */
 	getDiagonalMoves = (modifier = 8) => {
 		const possibleMoves = [];
 
-		//get moves up-right
+		/* 4 for loops check moves - up-right, down-left, down-right, up-left */
+
 		for (let i = 1; i <= modifier; i++) {
 
 			
@@ -363,17 +380,28 @@ class ChessPiece {
 		
 	}
 
+	/**
+	 * Get HTML elements for cells of possible moves and add the className of "possible-move" to highlight them visually
+	 * @returns {undefined}
+	 */
 	highlightPossibleMoves() {
 		this.possibleMoves.forEach((move) => {
 			document.getElementById("cell-"+ move).classList.add("possible-move");
 		});
 	}
 
+	/**
+	 * 
+	 * @param {String} team 
+	 * @param {number} cellIndex 
+	 */
 	constructor(team, cellIndex) {
 		this.cellIndex = cellIndex;
 		this.team = team;
 	}
 }
+/****************** End of ChessPiece class **************/
+
 
 class Pawn extends ChessPiece {
 	icon = "♟";
@@ -381,7 +409,11 @@ class Pawn extends ChessPiece {
 
 	firstMove = true;
 
-	//override
+	/**
+	 * Get possible moves for a pawn
+	 * @returns {undefined}
+	 * @override
+	 */
 	getPossibleMoves() {
 		const direction = this.team === "white" ? 1 : -1;
 		this.possibleMoves = [];
@@ -429,7 +461,10 @@ class Pawn extends ChessPiece {
 		ChessPiece.markPossibleMoves(this.possibleMoves, this.team);
 	}
 
-	//override
+	/**
+	 * For pawns - if a pawn reach the opposite edge, trigger popup for promotion 
+	 * @returns {undefined}
+	 */
 	moveExtra() {
 		const currentColumn = Math.floor(this.cellIndex / 8);
 		const currentRow = this.cellIndex - currentColumn * 8;
@@ -440,18 +475,26 @@ class Pawn extends ChessPiece {
 		}
 	}
 
+	/**
+	 * @param {String} team 
+	 * @param {number} cellIndex 
+	 */
 	constructor(team, cellIndex) {
 		super(team, cellIndex);
 	}
 }
 
 
+
 class Rook extends ChessPiece {
 	icon = "♜";
 	name = "rook";
 
-	//override
-
+	/**
+	 * Get possible moves for a rook
+	 * @returns {undefined}
+	 * @override
+	 */
 	getPossibleMoves() {
 		const straightMoves = this.getStraightMoves();
 
@@ -461,16 +504,26 @@ class Rook extends ChessPiece {
 
 	}
 	
-
+	/**
+	 * @param {String} team 
+	 * @param {number} cellIndex 
+	 */
 	constructor(team, cellIndex) {
 		super(team, cellIndex);
 	}
 }
 
+
+
 class Knight extends ChessPiece {
 	icon = "♞";
 	name = "knight";
 
+	/**
+	 * Get possible moves for a knight
+	 * @returns {undefined}
+	 * @override
+	 */
 	getPossibleMoves() {
 		this.possibleMoves = [];
 
@@ -508,15 +561,26 @@ class Knight extends ChessPiece {
 		ChessPiece.markPossibleMoves(this.possibleMoves, this.team);
 	}
 
+	/**
+	 * @param {String} team 
+	 * @param {number} cellIndex 
+	 */
 	constructor(team, cellIndex) {
 		super(team, cellIndex);
 	}
 }
 
+
+
 class Bishop extends ChessPiece {
 	icon = "♝";
 	name = "bishop";
 
+	/**
+	 * Get possible moves for a bishop
+	 * @returns {undefined}
+	 * @override
+	 */
 	getPossibleMoves() {
 		const diagonalMoves = this.getDiagonalMoves();
 
@@ -526,6 +590,10 @@ class Bishop extends ChessPiece {
 
 	}
 
+	/**
+	 * @param {String} team 
+	 * @param {number} cellIndex 
+	 */
 	constructor(team, cellIndex) {
 		super(team, cellIndex);
 	}
@@ -535,6 +603,11 @@ class Queen extends ChessPiece {
 	icon = "♛";
 	name = "queen";
 
+	/**
+	 * Get possible moves for a queen
+	 * @returns {undefined}
+	 * @override
+	 */
 	getPossibleMoves() {
 		const straightMoves = this.getStraightMoves();
 
@@ -546,6 +619,10 @@ class Queen extends ChessPiece {
 
 	}
 
+	/**
+	 * @param {String} team 
+	 * @param {number} cellIndex 
+	 */
 	constructor(team, cellIndex) {
 		super(team, cellIndex);
 	}
@@ -555,6 +632,11 @@ class King extends ChessPiece {
 	icon = "♚";
 	name = "king";
 
+	/**
+	 * Get possible moves for a king
+	 * @returns {undefined}
+	 * @override
+	 */
 	getPossibleMoves() {
 		const straightMoves = this.getStraightMoves(1);
 
@@ -565,6 +647,13 @@ class King extends ChessPiece {
 		ChessPiece.markPossibleMoves(this.possibleMoves, this.team);
 
 	}
+
+	//ToDo: moveExtra checks if new king's cell is dangerous, triggers a popup and declines moving
+
+	/**
+	 * @param {String} team 
+	 * @param {number} cellIndex 
+	 */
 	constructor(team, cellIndex) {
 		super(team, cellIndex);
 	}
