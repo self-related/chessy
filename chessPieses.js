@@ -47,6 +47,12 @@ class ChessPiece {
 
 	htmlElement = null;
 
+	/**
+	 * Checks for vertical bounds for a possible move
+	 * @param {number} cellIndex index of the current cell 
+	 * @param {number} possibleMove cell index of a possible move for checking
+	 * @returns {boolean} true - is in bounds, false - out of bounds
+	 */
 	static isInVerticalBounds = (cellIndex, possibleMove) => {
 		if (possibleMove > 63 || possibleMove < 0) {
 			return false;
@@ -60,6 +66,12 @@ class ChessPiece {
 	
 	}
 	
+	/**
+	 * Checks vertical bounds for a diagonal possible move
+	 * @param {number} lastMove - cell index of previous valid possible move
+	 * @param {number} possibleMove - cell index of a possible move for checking
+	 * @returns {boolean} - true - is in bounds, false - out of bounds
+	 */
 	static isInDiagonalBounds = (lastMove, possibleMove) => {
 		if (possibleMove > 63 || possibleMove < 0) {
 			return false;
@@ -73,6 +85,12 @@ class ChessPiece {
 	
 	}
 	
+	/**
+	 * Checks a knight's possible moves for vertical bounds
+	 * @param {number} cellIndex index of the current cell 
+	 * @param {number} possibleMove cell index of a possible move for checking
+	 * @returns {boolean} true - is in bounds, false - out of bounds
+	 */
 	static isKnightInBounds = (cellIndex, possibleMove) => {
 		if (possibleMove > 63 || possibleMove < 0) {
 			return false;
@@ -89,6 +107,12 @@ class ChessPiece {
 	
 	}
 	
+	/**
+	 * Marks cells as possible moves
+	 * @param {Array<number>} possibleMoves 
+	 * @param {String} team 
+	 * @returns {undefined}
+	 */
 	static markPossibleMoves = (possibleMoves, team) => {
 	
 		possibleMoves.forEach((move) => {
@@ -97,10 +121,21 @@ class ChessPiece {
 		});
 	}
 
+
+	/**
+	 * Executes with move() method
+	 * 
+	 * To Be Overridden
+	 */
 	moveExtra() {
-		//to be overridden
+		
 	}
 
+	/**
+	 * Moves the chess piece to another cell
+	 * @param {number} newCellIndex 
+	 * @returns {{returns: boolean, killedPiece: ChessPiece}}
+	 */
 	move(newCellIndex) {
 		let killedPiece = null;
 
@@ -125,8 +160,8 @@ class ChessPiece {
 			this.moveExtra();
 
 			
-			/**@returns {ChessPiece} */
 			return {result: true, killedPiece};
+
 		} else {
 			return {result: false, killedPiece};
 		}

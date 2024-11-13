@@ -1,44 +1,56 @@
 import { initPieces, ChessPiece, Queen, Knight, Rook, Bishop } from "./chessPieses.js";
 
-//JSDoc types:
+
+
+/********** JSDoc types ************/
 
 /**
- * @typedef {Object} Board
- * @prop {Array<string | number>} coords
+ * @typedef {Object} Cell
+ * @prop {ChessPiece} piece
+ * @prop {boolean} isPossibleMove
  */
 
 
-//Global vars
+
+
+/********* Global Variables *********/
 
 /**@type {ChessPiece} */
 let selectedPiece = null;
-
 let currentTurn = "white";
-
 let checkWhiteCount = 0; //count untill 2 before lose
 let checkBlackCount = 0;
 
-let gameOverCover = document.createElement("div");
-
+const gameOverCover = document.createElement("div");
 gameOverCover.className = "game-over";
 
 export const board = initBoard();
 let pieces = initPieces();
-const boardHTML = initBoardHTML(board);
-updatePiecesHTML(board, pieces); //update and debug
 
-// Functions
+/** 
+ * Rendered board in HTML
+ * @type {HTMLElement} 
+ */
+const boardHTML = initBoardHTML(board);
+updatePiecesHTML(board, pieces); //render chess pieces
+
+
+
+
+
+/********** Functions **********/
 
 function initBoard(cells = new Array(64).fill(null)) {
-	const board = cells.map((_cell, index) => (
+	const board = cells.map((_cell) => (
 		{
 			/**@type {ChessPiece} */
 			piece: null,
+
 			isPossibleMove: false,
 		}
 	));
 
-	/**@returns {Board} */
+	/**@returns {Array} */
 	return board;
 }
 
@@ -54,6 +66,11 @@ const updatePossibleMoves = () => {
 	pieces.forEach(piece => piece.getPossibleMoves());
 };
 
+/**
+ * Look for king's cell and decide if there's check
+ * 
+ * If check count is 2 it's mate and the opponent wins
+ */
 function isCheck() {
 	board.find((cell) => {
 		if (cell.piece?.name === "king" && cell.moveFor === "black") {
@@ -63,6 +80,7 @@ function isCheck() {
 			checkWhiteCount = 0;
 		}
 	});
+
 	board.find((cell) => {
 		if (cell.piece?.name === "king" && cell.moveFor === "white") {
 			alert("Check! Save black king!");
@@ -81,6 +99,11 @@ function isCheck() {
 	}
 }
 
+/**
+ * Moves selected chess piece
+ * @param {number} newCellIndex 
+ * @returns {undefined}
+ */
 function move(newCellIndex) {
 	const {result, killedPiece} = selectedPiece.move(newCellIndex);
 
@@ -102,17 +125,21 @@ function move(newCellIndex) {
 
 	cleanPossibleMoves();
 	updatePossibleMoves();
-	setTimeout(isCheck, 0); //check after html render
+	setTimeout(isCheck, 0); //look for check only after all html is rendered
 }
 
-
+/**
+ * Update chess pieces in HTML
+ * @param {Array<Cell>} board 
+ * @param {*} pieces 
+ * @returns 
+ */
 function updatePiecesHTML(board, pieces) {
 	const piecesHTML = []; //for debug
 
-
 	for (const piece of pieces) {
 
-		board.forEach((cell, index) => {
+		board.forEach((_cell, index) => {
 			const currentCell = document.getElementById(`cell-${index}`);
 
 			if (currentCell.id === `cell-${piece.cellIndex}`) {
@@ -156,13 +183,12 @@ function updatePiecesHTML(board, pieces) {
 }
 
 
-/** @param {Array<Board>} board */
+/** @param {Array<Cell>} board */
 function initBoardHTML(board) {
-
 	const boardHTML = document.getElementById("board");
 	boardHTML.innerHTML = '';
 
-	board.forEach((cell, index) => {
+	board.forEach((_cell, index) => {
 		const isColumnEven = Math.floor(index / 8) % 2 === 0;
 		const columnOrder = isColumnEven ? "column-even" : "column-odd";
 
@@ -185,11 +211,15 @@ function initBoardHTML(board) {
 }
 
 
+
+
+/********** Events **********/
+
+/* Pawn promotion popup */
 const chooseNewPieceWindow = document.getElementById("choose-new-piece");
 const chooseNewPieceDivs = document.querySelectorAll("#choose-new-piece > div");
 chooseNewPieceDivs.forEach((element) => {
 	element.addEventListener("click", (e) => {
-
 		let newElement = null;
 
 		switch (e.target.innerText) {
@@ -216,5 +246,5 @@ chooseNewPieceDivs.forEach((element) => {
 
 		chooseNewPieceWindow.classList.remove("display-block");
 	});
-})
+});
 
