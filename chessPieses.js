@@ -32,56 +32,6 @@ export function initPieces() {
 	return chessPieces;
 }
 
-const isInVerticalBounds = (cellIndex, possibleMove) => {
-	if (possibleMove > 63 || possibleMove < 0) {
-		return false;
-	}
-
-	const currentColumn = Math.floor(cellIndex / 8);
-
-	const newColumn = Math.floor(possibleMove / 8);
-
-	return currentColumn === newColumn;
-
-}
-
-const isInDiagonalBounds = (lastMove, possibleMove) => {
-	if (possibleMove > 63 || possibleMove < 0) {
-		return false;
-	}
-
-	const currentColumn = Math.floor(lastMove / 8);
-	const newColumn = Math.floor(possibleMove / 8);
-
-
-	return Math.abs(currentColumn - newColumn) === 1;
-
-}
-
-const isKnightInBounds = (cellIndex, possibleMove) => {
-	if (possibleMove > 63 || possibleMove < 0) {
-		return false;
-	}
-
-	const currentColumn = Math.floor(cellIndex / 8);
-	const currentRow = cellIndex - currentColumn * 8;
-
-	const newColumn = Math.floor(possibleMove / 8);
-	const newRow = possibleMove - newColumn * 8;
-
-
-	return Math.abs(currentRow - newRow) <= 3;
-
-}
-
-const markPossibleMoves = (possibleMoves, team) => {
-
-	possibleMoves.forEach((move) => {
-		board[move].isPossibleMove = true;
-		board[move].moveFor = team;
-	});
-}
-
 
 class ChessPiece {
 
@@ -97,7 +47,59 @@ class ChessPiece {
 
 	htmlElement = null;
 
-	moveExtra() {}
+	static isInVerticalBounds = (cellIndex, possibleMove) => {
+		if (possibleMove > 63 || possibleMove < 0) {
+			return false;
+		}
+	
+		const currentColumn = Math.floor(cellIndex / 8);
+	
+		const newColumn = Math.floor(possibleMove / 8);
+	
+		return currentColumn === newColumn;
+	
+	}
+	
+	static isInDiagonalBounds = (lastMove, possibleMove) => {
+		if (possibleMove > 63 || possibleMove < 0) {
+			return false;
+		}
+	
+		const currentColumn = Math.floor(lastMove / 8);
+		const newColumn = Math.floor(possibleMove / 8);
+	
+	
+		return Math.abs(currentColumn - newColumn) === 1;
+	
+	}
+	
+	static isKnightInBounds = (cellIndex, possibleMove) => {
+		if (possibleMove > 63 || possibleMove < 0) {
+			return false;
+		}
+	
+		const currentColumn = Math.floor(cellIndex / 8);
+		const currentRow = cellIndex - currentColumn * 8;
+	
+		const newColumn = Math.floor(possibleMove / 8);
+		const newRow = possibleMove - newColumn * 8;
+	
+	
+		return Math.abs(currentRow - newRow) <= 3;
+	
+	}
+	
+	static markPossibleMoves = (possibleMoves, team) => {
+	
+		possibleMoves.forEach((move) => {
+			board[move].isPossibleMove = true;
+			board[move].moveFor = team;
+		});
+	}
+
+	moveExtra() {
+		//to be overridden
+	}
 
 	move(newCellIndex) {
 		let killedPiece = null;
@@ -130,7 +132,9 @@ class ChessPiece {
 		}
 	}
 
-	getPossibleMoves() {}
+	getPossibleMoves() {
+		//to be overridden
+	}
 
 	getStraightMoves = (modifier = 8) => {
 		const possibleMoves = [];
@@ -140,7 +144,7 @@ class ChessPiece {
 
 			const possibleMove = this.cellIndex + i;
 
-			if (!isInVerticalBounds(this.cellIndex, possibleMove)) {
+			if (!ChessPiece.isInVerticalBounds(this.cellIndex, possibleMove)) {
 				break;
 			};
 
@@ -160,7 +164,7 @@ class ChessPiece {
 
 			const possibleMove = this.cellIndex - i;
 
-			if (!isInVerticalBounds(this.cellIndex, possibleMove)) {
+			if (!ChessPiece.isInVerticalBounds(this.cellIndex, possibleMove)) {
 				break;
 			};
 
@@ -231,7 +235,7 @@ class ChessPiece {
 
 			if (possibleMove > 63 || possibleMove < 0) break;
 
-			if (!isInDiagonalBounds(lastMove, possibleMove)) {
+			if (!ChessPiece.isInDiagonalBounds(lastMove, possibleMove)) {
 				break;
 			}
 				
@@ -256,7 +260,7 @@ class ChessPiece {
 			if (possibleMove > 63 || possibleMove < 0) 
 				break;
 
-			if (!isInDiagonalBounds(lastMove, possibleMove)) {
+			if (!ChessPiece.isInDiagonalBounds(lastMove, possibleMove)) {
 				break;
 			}
 
@@ -279,7 +283,7 @@ class ChessPiece {
 
 			if (possibleMove > 63 || possibleMove < 0) break;
 
-			if (!isInDiagonalBounds(lastMove, possibleMove)) {
+			if (!ChessPiece.isInDiagonalBounds(lastMove, possibleMove)) {
 				break;
 			}
 
@@ -303,7 +307,7 @@ class ChessPiece {
 
 			if (possibleMove > 63 || possibleMove < 0) break;
 
-			if (!isInDiagonalBounds(lastMove, possibleMove)) {
+			if (!ChessPiece.isInDiagonalBounds(lastMove, possibleMove)) {
 				break;
 			}
 
@@ -323,7 +327,6 @@ class ChessPiece {
 		return possibleMoves;
 		
 	}
-
 
 	highlightPossibleMoves() {
 		this.possibleMoves.forEach((move) => {
@@ -351,7 +354,7 @@ class Pawn extends ChessPiece {
 		for (let i = 1; i < 3; i++) {
 			const possibleMove = this.cellIndex + i * direction;
 
-			if (isInVerticalBounds(this.cellIndex, possibleMove) !== true) {
+			if (ChessPiece.isInVerticalBounds(this.cellIndex, possibleMove) !== true) {
 				break;
 			}
 
@@ -388,7 +391,7 @@ class Pawn extends ChessPiece {
 		}
 
 
-		markPossibleMoves(this.possibleMoves, this.team);
+		ChessPiece.markPossibleMoves(this.possibleMoves, this.team);
 	}
 
 	//override
@@ -419,7 +422,7 @@ class Rook extends ChessPiece {
 
 		this.possibleMoves = [...straightMoves];
 
-		markPossibleMoves(this.possibleMoves, this.team);
+		ChessPiece.markPossibleMoves(this.possibleMoves, this.team);
 
 	}
 	
@@ -451,7 +454,7 @@ class Knight extends ChessPiece {
 			if (possibleMove > 63 || possibleMove < 0) 
 			continue;
 
-			if (!isKnightInBounds( this.cellIndex, possibleMove)) {
+			if (!ChessPiece.isKnightInBounds( this.cellIndex, possibleMove)) {
 				continue;
 			}
 
@@ -467,7 +470,7 @@ class Knight extends ChessPiece {
 			this.possibleMoves.push(possibleMove);
 
 		}
-		markPossibleMoves(this.possibleMoves, this.team);
+		ChessPiece.markPossibleMoves(this.possibleMoves, this.team);
 	}
 
 	constructor(team, cellIndex) {
@@ -484,7 +487,7 @@ class Bishop extends ChessPiece {
 
 		this.possibleMoves = [...diagonalMoves];
 
-		markPossibleMoves(this.possibleMoves, this.team);
+		ChessPiece.markPossibleMoves(this.possibleMoves, this.team);
 
 	}
 
@@ -504,7 +507,7 @@ class Queen extends ChessPiece {
 
 		this.possibleMoves = [...straightMoves, ...diagonalMoves];
 
-		markPossibleMoves(this.possibleMoves, this.team);
+		ChessPiece.markPossibleMoves(this.possibleMoves, this.team);
 
 	}
 
@@ -524,7 +527,7 @@ class King extends ChessPiece {
 
 		this.possibleMoves = [...straightMoves, ...diagonalMoves];
 
-		markPossibleMoves(this.possibleMoves, this.team);
+		ChessPiece.markPossibleMoves(this.possibleMoves, this.team);
 
 	}
 	constructor(team, cellIndex) {
